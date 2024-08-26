@@ -3,6 +3,7 @@ package main
 import (
 	choosecity "booking_app/choose_city"
 	"fmt"
+	"sync"
 )
 
 // Package Level Variables - can be accessed inside any of the functions
@@ -31,6 +32,10 @@ type userData struct {
 	ticketsNumber uint8
 }
 
+// without WaitGroup when program is finished and
+// some goroutines is not, then these routines will be aborted
+var wg = sync.WaitGroup{}
+
 func main() {
 	// Welcome part
 	greetUser()
@@ -46,6 +51,12 @@ func main() {
 
 		bookTickets(firstName, lastName, email, userTickets)
 
+		// Add method sets the number of goroutines to wait for
+		wg.Add(1)
+		// go keyword make function concurrent -
+		// additional goroutine (lightweight thread) is created for that function
+		go sendTicket(firstName, lastName, email, userTickets)
+
 		// instead of printing full name of the users who have booked
 		// tikets, only their first names are printed
 		firstNames := getFirstNames()
@@ -58,4 +69,6 @@ func main() {
 	if !learning_func {
 		choosecity.Choose_city()
 	}
+	// blocks main thread until the WaitGroup couter is 0
+	wg.Wait()
 }

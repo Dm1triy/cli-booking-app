@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func greetUser() {
@@ -103,4 +104,15 @@ func getFirstNames() []string {
 		firstNames = append(firstNames, firstName)
 	}
 	return firstNames
+}
+
+func sendTicket(firstName string, lastName string, email string, userTickets uint8) {
+	time.Sleep(10 * time.Second)
+	var emailMessage = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
+	fmt.Println("\n###############################")
+	fmt.Printf("Sending ticket:\n %v \n to email address %v\n", emailMessage, email)
+	fmt.Println("###############################")
+	fmt.Println(" ")
+	// Done function removes the thread and dcreases the WaitGroup counter by 1
+	wg.Done()
 }
